@@ -61,16 +61,49 @@ section, footer {
   font-weight: bold;
   cursor: pointer;
 }
+form {
+[24/08 à 10:46] ChatGPT: background: #fff;
+  color: #333;
+  padding: 20px;
+  max-width: 600px;
+  margin: 30px auto;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+form label {
+  display: block;
+  margin: 10px 0 5px;
+  font-weight: bold;
+}
+form input, form select {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+form button {
+  background: #1e3c72;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+}
+form button:hover {
+  background: #2a5298;
+}
 </style>
- </head>
+</head>
 <body>
 <header>
 <nav>
 <h1>Architext</h1>
 <ul>
 <li><a href="#">Accueil</a></li>
-<li><a href="#">À propos</a></li>
-<li><a href="#">Contact</a></li>
+<li><a href="#about">À propos</a></li>
+<li><a href="#contact">Contact</a></li>
 </ul>
 </nav>
 <div class="hero">
@@ -83,17 +116,51 @@ section, footer {
 <select id="language-select" aria-label="Choisir la langue">
   <option value="fr">Français</option>
   <option value="en">English</option>
-  <option value="es">Español</option>
+ <option value="es">Español</option>
   <option value="ar">العربية</option>
   <option value="zh">中文</option>
 </select>
 </div>
 </header>
+
 <section id="about">
 <h2>À propos</h2>
 <p>BryLeb Créations est votre partenaire privilégié pour des projets architecturaux modernes, innovants et personnalisés, alliant esthétisme et performance durable.</p>
 </section>
-<footer>
+
+<section id="registration">
+<h2>Inscription</h2>
+<form id="signup-form">
+  <label for="role">Je m'inscris en tant que :</label>
+  <select id="role" name="role" required>
+    <option value="">--Choisissez un rôle--</option>
+    <option value="utilisateur">Utilisateur</option>
+    <option value="architecte">Architecte</option>
+  </select>
+
+  <label for="username">Nom d'utilisateur :</label>
+  <input type="text" id="username" name="username" required />
+
+  <label for="email">Adresse email :</label>
+  <input type="email" id="email" name="email" required />
+
+  <label for="password">Mot de passe :</label>
+  <input type="password" id="password" name="password" required />
+
+  <label for="language">Langue préférée :</label>
+  <select id="language" name="language" required>
+    <option value="fr">Français</option>
+    <option value="en">English</option>
+    <option value="es">Español</option>
+    <option value="ar">العربية</option>
+ <option value="zh">中文</option>
+  </select>
+
+  <button type="submit">S'inscrire</button>
+</form>
+</section>
+
+<footer id="contact">
 <p>&copy; 2025 BryLeb Créations - Tous droits réservés</p>
 </footer>
 
@@ -101,59 +168,75 @@ section, footer {
 const translations = {
   fr: {
     welcome: "Bienvenue sur Architext",
- description: "Explorez nos réalisations architecturales innovantes et nos solutions sur-mesure.",
+    description: "Explorez nos réalisations architecturales innovantes et nos solutions sur-mesure.",
     impact: "Nous plaçons l'excellence, la créativité et l'impact au cœur de chaque projet.",
     aboutTitle: "À propos",
     aboutText: "BryLeb Créations est votre partenaire privilégié pour des projets architecturaux modernes, innovants et personnalisés, alliant esthétisme et performance durable.",
-    discover: "Découvrir"
+    discover: "Découvrir",
+    registrationTitle: "Inscription",
+    roleLabel: "Je m'inscris en tant que :",
+    roleUser: "Utilisateur",
+    roleArch: "Architecte",
+    usernameLabel: "Nom d'utilisateur :",
+    emailLabel: "Adresse email :",
+    passwordLabel: "Mot de passe :",
+    languageLabel: "Langue préférée :",
+    signupBtn: "S'inscrire"
   },
   en: {
     welcome: "Welcome to Architext",
     description: "Explore our innovative architectural projects and tailored solutions.",
     impact: "We place excellence, creativity, and impact at the heart of every project.",
     aboutTitle: "About",
-    aboutText: "BryLeb Créations is your trusted partner for modern, innovative, and personalized architectural projects combining aesthetics and sustainable performance.",
-    discover: "Discover"
+ aboutText: "BryLeb Créations is your trusted partner for modern, innovative, and personalized architectural projects combining aesthetics and sustainable performance.",
+    discover: "Discover",
+    registrationTitle: "Sign Up",
+    roleLabel: "I register as:",
+    roleUser: "User",
+    roleArch: "Architect",
+    usernameLabel: "Username:",
+    emailLabel: "Email address:",
+    passwordLabel: "Password:",
+    languageLabel: "Preferred language:",
+    signupBtn: "Sign Up"
   },
   es: {
     welcome: "Bienvenido a Architext",
     description: "Explora nuestros proyectos arquitectónicos innovadores y soluciones personalizadas.",
     impact: "Ponemos la excelencia, la creatividad y el impacto en el centro de cada proyecto.",
     aboutTitle: "Acerca de",
-[24/08 à 10:37] ChatGPT: aboutText: "BryLeb Créations es tu socio confiable para proyectos arquitectónicos modernos, innovadores y personalizados, que combinan estética y rendimiento sostenible.",
-    discover: "Descubrir"
+    aboutText: "BryLeb Créations es tu socio confiable para proyectos arquitectónicos modernos, innovadores y personalizados, que combinan estética y rendimiento sostenible.",
+    discover: "Descubrir",
+    registrationTitle: "Registro",
+    roleLabel: "Me registro como:",
+    roleUser: "Usuario",
+    roleArch: "Arquitecto",
+    usernameLabel: "Nombre de usuario:",
+    emailLabel: "Correo electrónico:",
+    passwordLabel: "Contraseña:",
+    languageLabel: "Idioma preferido:",
+    signupBtn: "Registrarse"
   },
   ar: {
-    welcome: "مرحبًا بك في Architext",
+ welcome: "مرحبًا بك في Architext",
     description: "استكشف مشاريعنا المعمارية المبتكرة وحلولنا المصممة حسب الطلب.",
     impact: "نضع التميز والإبداع والتأثير في قلب كل مشروع.",
     aboutTitle: "معلومات عنا",
     aboutText: "بريليب كرياتيونز هو شريكك الموثوق للمشاريع المعمارية الحديثة والمبتكرة والمخصصة، التي تجمع بين الجمال والأداء المستدام.",
-    discover: "اكتشف"
+    discover: "اكتشف",
+    registrationTitle: "تسجيل",
+    roleLabel: "أنا أسجل كـ:",
+    roleUser: "مستخدم",
+    roleArch: "مهندس معماري",
+    usernameLabel: "اسم المستخدم:",
+    emailLabel: "البريد الإلكتروني:",
+    passwordLabel: "كلمة المرور:",
+    languageLabel: "اللغة المفضلة:",
+    signupBtn: "تسجيل"
   },
   zh: {
     welcome: "欢迎来到Architext",
     description: "探索我们创新的建筑项目和量身定制的解决方案。",
     impact: "我们将卓越、创造力和影响力置于每个项目的核心。",
     aboutTitle: "关于我们",
-    aboutText: "BryLeb Créations是您值得信赖的合作伙伴，提供现代、创新且个性化的建筑项目，结合美学与可持续性能。",
-    discover: "探索"
-  }
-};
-
-const languageSelect = document.getElementById('language-select');
-
-languageSelect.addEventListener('change', () => {
-  const lang = languageSelect.value;
-  document.querySelector('.hero h2').textContent = translations[lang].welcome;
-  const heroParagraphs = document.querySelectorAll('.hero p');
-  heroParagraphs[0].textContent = translations[lang].description;
-  heroParagraphs[1].textContent = translations[lang].impact;
-[24/08 à 10:37] ChatGPT: document.querySelector('#about h2').textContent = translations[lang].aboutTitle;
-  document.querySelector('#about p').textContent = translations[lang].aboutText;
-  document.querySelector('.btn').textContent = translations[lang].discover;
-});
-</script>
-
-</body>
-</html>
+    aboutText:
