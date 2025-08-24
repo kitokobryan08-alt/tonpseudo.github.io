@@ -1,74 +1,67 @@
 ```css
-/* Couleurs principales */
-:root {
-  --bleu-fonce: #003366;
-  --bleu-ciel: #5dade2;
-  --blanc: #ffffff;
-}
-
-/* Reset basique */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-/* Corps de page */
 body {
-  background: var(--blanc);
-  color: var(--bleu-fonce);
-  line-height: 1.6;
+  margin: 0;
+  font-family: Arial, sans-serif;
 }
 
-/* Header */
 header {
-  background: linear-gradient(90deg, var(--bleu-fonce), var(--bleu-ciel));
-  color: var(--blanc);
+  background: #0d47a1;
+  color: white;
+  padding: 20px 0;
+  text-align: center;
+}
+
+nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0 0;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.hero {
+  background: linear-gradient(to right, #2196f3, #21cbf3);
+  color: white;
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.hero h2 {
+  font-size: 2.5em;
+}
+
+.hero p {
+  font-size: 1.2em;
+  margin-bottom: 20px;
+}
+
+.btn {
+  background: white;
+  color: #2196f3;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+#about {
   padding: 60px 20px;
   text-align: center;
 }
 
-header nav {
-  margin-bottom: 30px;
+footer {
+  background: #0d47a1;
+  color: white;
+  text-align: center;
+  padding: 15px 0;
 }
+```
 
-header nav ul {
-  list-style: none;
-  display: flex;
-  justify-content: center;
-  gap: 30px;
-  font-weight: 600;
-}
-
-header nav ul li a {
-  color: var(--blanc);
-  text-decoration: none;
-  font-size: 1.1rem;
-  transition: color 0.3s ease;
-}
-
-header nav ul li a:hover {
-  color: #f0c040;
-}
-
-/* Hero */
-.hero h2 {
-  font-size: 2.8rem;
-  margin-bottom: 15px;
-  font-weight: 700;
-}
-
-.hero p {
-  font-size: 1.2rem;
-  margin-bottom: 20px;
-  opacity: 0.85;
-}
-
-/* Bouton */
-.btn {
-  background-color: #f0c040;
-  color: var(--bleu-fonce);
-  padding: 12px 28px;
-  border-radius: 5px;
-  text-decoration: none;
+Tu peux créer un fichier nommé *`style.css`*, y coller ce code, et l'enregistrer dans le même dossier que ton fichier `index.html`. Ça appliquera les bonnes couleurs comme avant.
