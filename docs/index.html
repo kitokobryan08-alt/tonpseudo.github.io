@@ -3,130 +3,190 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Architext - Connexion & Inscription</title>
+<title>Architext - Dashboard</title>
 <style>
   body {
-    font-family: Arial, sans-serif;
+    font-family: sans-serif;
     background: linear-gradient(135deg, #1e3c72, #2a5298);
-    color: white;
-    text-align: center;
-    padding: 50px 20px;
+    color: #fff;
+    margin: 0; padding: 20px;
   }
-  h1 { margin-bottom: 20px; }
+  h1, h2 { text-align: center; }
   form {
-    background: rgba(255,255,255,0.1);
-    padding: 20px;
+    max-width: 500px;
     margin: 20px auto;
-    max-width: 350px;
-    border-radius: 10px;
+    background: #fff;
+    color: #333;
+    padding: 15px;
+    border-radius: 8px;
   }
-  label {
-    display: block;
-    text-align: left;
-    margin: 10px 0 5px;
-  }
-  input, select {
+  input, textarea {
     width: 100%;
     padding: 8px;
-    border: none;
-    border-radius: 5px;
+    margin-top: 8px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
   }
   button {
-    margin-top: 15px;
-    padding: 10px;
-    width: 100%;
+    background: #2a5298;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  #projectsList > div {
     background: #fff;
- const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    const signupSection = document.getElementById("signup-section");
-    const loginSection = document.getElementById("login-section");
-    const signupForm = document.getElementById("signup-form");
-    const loginForm = document.getElementById("login-form");
-    const signupError = document.getElementById("signup-error");
-    const loginError = document.getElementById("login-error");
-
-    document.getElementById("show-login").addEventListener("click", () => {
-      signupSection.style.display = "none";
-      loginSection.style.display = "block";
-      signupError.textContent = "";
-      loginError.textContent = "";
-    });
-    document.getElementById("show-signup").addEventListener("click", () => {
-      loginSection.style.display = "none";
-      signupSection.style.display = "block";
-      signupError.textContent = "";
-      loginError.textContent = "";
-    });
-
-    signupForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      signupError.textContent = "";
-      const email = document.getElementById("signup-email").value.trim();
-      const password = document.getElementById("signup-password").value;
-      const role = document.getElementById("signup-role").value;
-
-      try {
- font-weight: bold;
+    color: #333;
+    padding: 10px;
+    margin: 10px auto;
+    max-width: 500px;
+    border-radius: 8px;
+  }
+ #projectsList img {
+    max-width: 100%;
+    border-radius: 4px;
+    margin-top: 8px;
+  }
+  #message {
+    text-align: center;
+    margin-top: 10px;
   }
 </style>
 </head>
 <body>
-  <h1>Bienvenue sur votre espace utilisateur</h1>
-  <p>Ici vous pouvez gérer vos projets, voir vos plans, etc.</p>
-  <button id="logout-btn">Se déconnecter</button>
 
-  <script type="module">
-    import { initializeApp }
- loginError.textContent = "Rôle utilisateur non défini.";
-          }
-        } else {
-          loginError.textContent = "Utilisateur non trouvé en base.";
-        }
-      } catch (error) {
-        loginError.textContent = error.message;
-      }
-    });
+<h1>Dashboard Architext</h1>
 
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        const userDoc = await getDoc(doc(db, "users", user.uid));
-        if (userDoc.exists()) {
-          const userData = userDoc.data();
-          if (userData.role === "utilisateur") {
-            window.location.href = "user-dashboard.html";
-          } else if (userData.role === "architecte") {
-            window.location.href = "architect-dashboard.html";
-          }
-        }
+<form id="projectForm">
+  <h2>Créer un projet</h2>
+  <label for="description">Description :</label>
+  <textarea id="description" rows="4" required></textarea>
+
+  <label for="photo">Photo du projet :</label>
+  <input type="file" id="photo" accept="image/*" required />
+
+  <button type="submit">Créer le projet</button>
+</form>
+
+<div id="message"></div>
+
+<section id="my-projects">
+  <h2>Mes projets</h2>
+  <div id="projectsList">Chargement des projets...</div>
+</section>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+  import { getFirestore, collection, query, where, onSnapshot, addDoc, serverTimestamp, orderBy } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+  import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-storage.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyB_25LK7m2SXg4xAyaMXV18uU4b5-JPEHw",
+ authDomain: "architext-9efb6.firebaseapp.com",
+    projectId: "architext-9efb6",
+    storageBucket: "architext-9efb6.appspot.com",
+    messagingSenderId: "70580255187",
+    appId: "1:70580255187:web:ee3591d6d3c2f52b491726"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth();
+  const db = getFirestore();
+  const storage = getStorage();
+
+  const projectForm = document.getElementById("projectForm");
+  const descriptionInput = document.getElementById("description");
+  const photoInput = document.getElementById("photo");
+  const projectsList = document.getElementById("projectsList");
+  const messageDiv = document.getElementById("message");
+
+  let currentUser = null;
+
+  // Vérifie l'authentification
+  onAuthStateChanged(auth, (user) => {
+    if (!user) {
+      projectsList.textContent = "Veuillez vous connecter pour voir vos projets.";
+      projectForm.style.display = "none";
+      return;
+    }
+    currentUser = user;
+    projectForm.style.display = "block";
+    loadProjects(user.uid);
+  });
+
+  // Chargement des projets en temps réel
+  function loadProjects(uid) {
+    const q = query(
+      collection(db, "projects"),
+      where("userId", "==", uid),
+      orderBy("createdAt", "desc")
+    );
+    onSnapshot(q, (querySnapshot) => {
+ if (querySnapshot.empty) {
+        projectsList.textContent = "Vous n’avez aucun projet pour l’instant.";
+        return;
       }
+      projectsList.innerHTML = "";
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        const projectDiv = document.createElement("div");
+        projectDiv.innerHTML = `
+          <p><strong>Description :</strong> data.description</p>{data.photoURL ? `<img src="data.photoURL" alt="Photo du projet" />` : ""
+          <p><strong>Statut :</strong>{data.status || 'En attente'}</p>
+          <p><small>Créé le : ${data.createdAt?.toDate().toLocaleString() || ''}</small></p>
+        `;
+        projectsList.appendChild(projectDiv);
+      });
+    }, (error) => {
+      projectsList.textContent = "Erreur lors du chargement des projets : " + error.message;
     });
-  </script>
+  }
+
+  // Création d'un projet avec upload photo
+  projectForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!currentUser) {
+      messageDiv.textContent = "Vous devez être connecté.";
+      return;
+    }
+
+    const description = descriptionInput.value.trim();
+    const photoFile = photoInput.files[0];
+
+    if (!description || !photoFile) {
+      messageDiv.textContent = "Veuillez remplir tous les champs.";
+      return;
+    }
+ messageDiv.textContent = "Chargement en cours...";
+
+    try 
+      // Upload de la photo dans Firebase Storage
+      const photoRef = ref(storage, `projects/{currentUser.uid}/Date.now()_{photoFile.name}`);
+      await uploadBytes(photoRef, photoFile);
+      const photoURL = await getDownloadURL(photoRef);
+
+      // Ajout du projet dans Firestore
+      await addDoc(collection(db, "projects"), {
+        userId: currentUser.uid,
+        description,
+        photoURL,
+        status: "En attente",
+        createdAt: serverTimestamp()
+      });
+
+      messageDiv.textContent = "Projet créé avec succès !";
+      projectForm.reset();
+
+    } catch (error) {
+      messageDiv.textContent = "Erreur lors de la création du projet : " + error.message;
+    }
+  });
+</script>
+
 </body>
 </html>
 
 
-
-
-
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Dashboard Utilisateur - Architext</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background: #2a5298;
-    color: white;
-    text-align: center;
-    padding: 50px 20px;
-  }
-  button {
-    padding: 10px 20px;
-    background: white;
-    color: #2a5298;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
