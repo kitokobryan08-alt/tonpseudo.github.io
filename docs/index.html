@@ -41,101 +41,68 @@
     font-weight: bold;
     display: inline-block;
     margin-top: 10px;
-    cursor: pointer;
-    border: none;
   }
   section, footer {
     background: #fff;
     color: #333;
     padding: 20px;
     margin-top: 20px;
-    max-width: 400px;
- margin-left: auto;
-    margin-right: auto;
-    border-radius: 8px;
   }
-  input, select {
-    width: 90%;
-    padding: 8px;
-    margin: 8px 0;
-    border-radius: 4px;
-    border: 1px solid #ccc;
+  form input, form button {
+    margin: 5px;
+    padding: 10px;
+    font-size: 1rem;
   }
-  #user-info {
-    margin-top: 15px;
-    font-weight: bold;
-    color: #0a7;
-  }
-  #error-message {
-    color: #d33;
-    font-weight: bold;
+  #auth button {
+    cursor: pointer;
   }
 </style>
 </head>
 <body>
+
 <header>
   <nav>
     <h1>Architext</h1>
     <ul>
-      <li><a href="#">Accueil</a></li>
+ <li><a href="#">Accueil</a></li>
       <li><a href="#about">À propos</a></li>
-      <li><a href="#contact">Contact</a></li>
+      <li><a href="#auth">Connexion</a></li>
+      <li><a href="#">Contact</a></li>
     </ul>
   </nav>
   <div class="hero">
     <h2>Bienvenue sur Architext</h2>
     <p>Explorez nos réalisations architecturales innovantes et nos solutions sur-mesure.</p>
     <p>Nous plaçons l'excellence, la créativité et l'impact au cœur de chaque projet.</p>
+    <a href="#about" class="btn">Découvrir</a>
   </div>
 </header>
+
+<section id="auth">
+  <h2>Connexion / Inscription</h2>
+  <form id="auth-form">
+    <input type="email" id="email" placeholder="Email" required />
+    <input type="password" id="password" placeholder="Mot de passe" required />
+    <br />
+    <button type="submit" id="btn-login">Se connecter</button>
+    <button type="button" id="btn-signup">S’inscrire</button>
+  </form>
+  <button id="btn-logout" style="display:none;">Se déconnecter</button>
+  <p id="message"></p>
+</section>
 
 <section id="about">
   <h2>À propos</h2>
   <p>Architext est votre partenaire privilégié pour des projets architecturaux modernes, innovants et personnalisés, alliant esthétisme et performance durable.</p>
 </section>
 
-<section id="inscription">
-  <h2>Inscription</h2>
-  <form id="signup-form">
-    <input type="email" id="signup-email" placeholder="Email" required />
-    <input type="password" id="signup-password" placeholder="Mot de passe" required minlength="6" />
- <select id="signup-language" required>
-      <option value="" disabled selected>Choisissez votre langue</option>
-      <option value="fr">Français</option>
-      <option value="en">Anglais</option>
-      <option value="es">Espagnol</option>
-      <option value="ar">Arabe</option>
-      <option value="zh">Mandarin</option>
-    </select>
-    <button type="submit" class="btn">S'inscrire</button>
-  </form>
-  <p id="signup-message"></p>
-</section>
-
-<section id="connexion">
-  <h2>Connexion</h2>
-  <form id="login-form">
-    <input type="email" id="login-email" placeholder="Email" required />
-    <input type="password" id="login-password" placeholder="Mot de passe" required />
-    <button type="submit" class="btn">Se connecter</button>
-  </form>
-  <p id="login-message"></p>
-</section>
-
-<section id="user-status" style="display:none;">
-  <h2>Bienvenue, <span id="user-email"></span></h2>
-  <p>Langue préférée : <span id="user-language">Non spécifiée</span></p>
-  <button id="logout-btn" class="btn">Se déconnecter</button>
-</section>
-
-<footer id="contact">
+<footer>
   <p>&copy; 2025 Architext - Tous droits réservés</p>
 </footer>
 
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-[24/08 à 21:31] ChatGPT: import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-  import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyB_25LK7m2SXg4xAyaMXV18uU4b5-JPEHw",
@@ -147,85 +114,62 @@
   };
 
   const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
+  const auth = getAuth();
 
-  // Sign Up
-  const signupForm = document.getElementById('signup-form');
-  const signupMessage = document.getElementById('signup-message');
+  const emailInput = document.getElementById('email');
+  const passwordInput = document.getElementById('password');
+  const loginBtn = document.getElementById('btn-login');
+  const signupBtn = document.getElementById('btn-signup');
+  const logoutBtn = document.getElementById('btn-logout');
+  const messageP = document.getElementById('message');
 
-  signupForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    signupMessage.textContent = '';
-    const email = document.getElementById('signup-email').value;
-    const password = document.getElementById('signup-password').value;
-    const language = document.getElementById('signup-language').value;
-
-    try {
- const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-
-      // Save user language in Firestore
-      await setDoc(doc(db, "users", user.uid), { language: language });
-
-      signupMessage.style.color = 'green';
-      signupMessage.textContent = "Inscription réussie! Vous pouvez maintenant vous connecter.";
-      signupForm.reset();
-    } catch (error) {
-      signupMessage.style.color = 'red';
-      signupMessage.textContent = `Erreur : error.message`;
-    );
-
-  // Login
-  const loginForm = document.getElementById('login-form');
-  const loginMessage = document.getElementById('login-message');
-
-  loginForm.addEventListener('submit', async (e) => 
-    e.preventDefault();
-    loginMessage.textContent = ”;
-    const email = document.getElementById('login-email').value;
-    const password = document.getElementById('login-password').value;
-
-    try 
-      await signInWithEmailAndPassword(auth, email, password);
-      loginMessage.textContent = ”;
-      loginForm.reset();
-     catch (error) 
-      loginMessage.style.color = 'red';
-      loginMessage.textContent = `Erreur :{error.message}`;
-    }
+  signupBtn.addEventListener('click', () => {
+    createUserWithEmailAndPassword(auth, emailInput.value, passwordInput.value)
+      .then(userCredential => {
+        messageP.textContent = `Inscription réussie : ${userCredential.user.email}`;
+        toggleUI(true);
+      })
+      .catch(error => {
+ messageP.textContent = `Erreur :{error.message}`;
+      });
   });
 
-  // Logout
-  const logoutBtn = document.getElementById('logout-btn');
- logoutBtn.addEventListener('click', () => {
-    signOut(auth);
+  loginBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    signInWithEmailAndPassword(auth, emailInput.value, passwordInput.value)
+      .then(userCredential => {
+        messageP.textContent = `Connecté en tant que : userCredential.user.email`;
+        toggleUI(true);
+      )
+      .catch(error => 
+        messageP.textContent = `Erreur :{error.message}`;
+      });
   });
 
-  // Auth state listener
-  const userStatusSection = document.getElementById('user-status');
-  const userEmailSpan = document.getElementById('user-email');
-  const userLanguageSpan = document.getElementById('user-language');
+  logoutBtn.addEventListener('click', () => {
+    signOut(auth).then(() => {
+      messageP.textContent = 'Déconnecté';
+      toggleUI(false);
+    });
+  });
 
-  onAuthStateChanged(auth, async (user) => {
+  function toggleUI(isLoggedIn) {
+    emailInput.style.display = isLoggedIn ? 'none' : 'inline-block';
+    passwordInput.style.display = isLoggedIn ? 'none' : 'inline-block';
+    loginBtn.style.display = isLoggedIn ? 'none' : 'inline-block';
+    signupBtn.style.display = isLoggedIn ? 'none' : 'inline-block';
+    logoutBtn.style.display = isLoggedIn ? 'inline-block' : 'none';
+  }
+
+  auth.onAuthStateChanged(user => {
+    toggleUI(!!user);
     if (user) {
-      // Fetch language from Firestore
-      const userDoc = await getDoc(doc(db, "users", user.uid));
-      const userData = userDoc.exists() ? userDoc.data() : {};
-      userEmailSpan.textContent = user.email;
-      userLanguageSpan.textContent = userData.language || "Non spécifiée";
-
-      userStatusSection.style.display = 'block';
-      signupForm.style.display = 'none';
-      loginForm.style.display = 'none';
-      signupMessage.textContent = '';
-      loginMessage.textContent = '';
+      messageP.textContent = `Connecté en tant que : ${user.email}`;
     } else {
-      userStatusSection.style.display = 'none';
-      signupForm.style.display = 'block';
-      loginForm.style.display = 'block';
+      messageP.textContent = 'Vous êtes déconnecté';
     }
   });
 </script>
+
 </body>
 </html>
