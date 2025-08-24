@@ -1,1 +1,105 @@
 <!-- Début du dashboard architecte -->).
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Dashboard Architecte</title>
+<style>
+  body {
+    font-family: sans-serif;
+    margin: 0;
+    background: #f4f4f4;
+    color: #333;
+  }
+  header {
+    background: #2a5298;
+    color: white;
+    padding: 20px;
+    text-align: center;
+  }
+  main {
+    padding: 20px;
+  }
+  .project-list {
+    margin-top: 20px;
+  }
+  .project {
+    background: white;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  .project img {
+    max-width: 100%;
+    border-radius: 5px;
+    margin-top: 10px;
+  }
+</style>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+  import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
+  const firebaseConfig = {
+[25/08 à 00:31] ChatGPT: } else {
+      window.location.href = "../index.html";
+    }
+  });
+</script>
+</head>
+<body>
+<header>
+  <h1>Dashboard Architecte</h1>
+  <p>Bienvenue sur votre espace personnel</p>
+</header>
+<main>
+  <h2>Projets attribués</h2>
+  <div class="project-list" id="projectList"></div>
+</main>
+</body>
+</html>
+
+
+Tu peux copier-coller ce code tel quel dans ton fichier *dashboard-architecte/index.html*.  
+Il affichera les projets où `architectId` = UID de l’architecte connecté.  
+
+Dis-moi si tu veux la suite (ex : création d’un projet, modification, etc.).
+ apiKey: "AIzaSyB_25LK7m2SXg4xAyaMXV18uU4b5-JPEHw",
+    authDomain: "architext-9efb6.firebaseapp.com",
+    projectId: "architext-9efb6",
+    storageBucket: "architext-9efb6.firebasestorage.app",
+    messagingSenderId: "70580255187",
+    appId: "1:70580255187:web:ee3591d6d3c2f52b491726"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const auth = getAuth(app);
+
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      const uid = user.uid;
+      const projectList = document.getElementById('projectList');
+      projectList.innerHTML = "";
+
+      const q = query(collection(db, "projects"), where("architectId", "==", uid));
+      const querySnapshot = await getDocs(q);
+
+      if (querySnapshot.empty) {
+        projectList.innerHTML = "<p>Aucun projet attribué pour le moment.</p>";
+      } else {
+        querySnapshot.forEach((doc) => {
+          const project = doc.data();
+          const div = document.createElement("div");
+          div.classList.add("project");
+          div.innerHTML = `
+            <h3>project.title</h3>
+            <p>{project.description}</p>
+            project.photoURL ? `<img src="{project.photoURL}" alt="Photo du projet" />` : ""}
+          `;
+          projectList.appendChild(div);
+        });
+      }
