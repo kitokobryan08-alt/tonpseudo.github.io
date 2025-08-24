@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -51,11 +52,12 @@
     form {
       background: #fff;
       padding: 20px;
-      border-radius: 8px;
+ border-radius: 8px;
       display: inline-block;
+      margin-top: 10px;
     }
     input, select, button {
- margin: 10px 0;
+      margin: 10px 0;
       padding: 10px;
       width: 100%;
       max-width: 300px;
@@ -76,7 +78,8 @@
       <h1>Architext</h1>
       <ul>
         <li><a href="#">Accueil</a></li>
-        <li><a href="#">À propos</a></li>
+        <li><a href="#about">À propos</a></li>
+        <li><a href="#signup">Inscription</a></li>
         <li><a href="#">Contact</a></li>
       </ul>
     </nav>
@@ -96,9 +99,9 @@
   <section id="signup">
     <h2>Créer un compte</h2>
     <form action="#" method="post">
-      <input type="text" name="fullname" placeholder="Nom complet" required><br>
+ <input type="text" name="fullname" placeholder="Nom complet" required><br>
       <input type="email" name="email" placeholder="Adresse e-mail" required><br>
- <input type="password" name="password" placeholder="Mot de passe" required><br>
+      <input type="password" name="password" placeholder="Mot de passe" required><br>
       <select name="role" required>
         <option value="">Choisir un rôle</option>
         <option value="user">Utilisateur</option>
@@ -113,3 +116,5 @@
   </footer>
 </body>
 </html>
+```
+
