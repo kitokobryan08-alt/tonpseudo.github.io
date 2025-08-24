@@ -1,64 +1,74 @@
+```css
+/* Couleurs principales */
+:root {
+  --bleu-fonce: #003366;
+  --bleu-ciel: #5dade2;
+  --blanc: #ffffff;
+}
+
+/* Reset basique */
 * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 
+/* Corps de page */
+body {
+  background: var(--blanc);
+  color: var(--bleu-fonce);
+  line-height: 1.6;
+}
+
+/* Header */
 header {
-  background: linear-gradient(to right, #4facfe, #00f2fe);
-  color: white;
+  background: linear-gradient(90deg, var(--bleu-fonce), var(--bleu-ciel));
+  color: var(--blanc);
+  padding: 60px 20px;
   text-align: center;
-  padding: 40px 20px;
 }
 
-nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+header nav {
+  margin-bottom: 30px;
 }
 
-nav h1 {
-  font-size: 1.8rem;
-}
-
-nav ul {
+header nav ul {
   list-style: none;
   display: flex;
-  gap: 20px;
+  justify-content: center;
+  gap: 30px;
+  font-weight: 600;
 }
 
-nav ul li a {
-  color: white;
+header nav ul li a {
+  color: var(--blanc);
   text-decoration: none;
-  font-weight: bold;
+  font-size: 1.1rem;
+  transition: color 0.3s ease;
 }
 
-.hero {
-  margin-top: 30px;
+header nav ul li a:hover {
+  color: #f0c040;
 }
 
+/* Hero */
 .hero h2 {
-  font-size: 2.5rem;
+  font-size: 2.8rem;
+  margin-bottom: 15px;
+  font-weight: 700;
 }
 
 .hero p {
-  margin: 15px 0;
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  opacity: 0.85;
 }
 
+/* Bouton */
 .btn {
-  display: inline-block;
-  padding: 10px 20px;
-  background: white;
-  color: #00aaff;
+  background-color: #f0c040;
+  color: var(--bleu-fonce);
+  padding: 12px 28px;
   border-radius: 5px;
   text-decoration: none;
-  font-weight: bold;
-}
-
-section {
-  padding: 50px 20px;
-  text-align: center;
-}
-
-footer {
-  background: #222;
-  color: white;
-  padding: 20px;
-  text-align: center;
-}
