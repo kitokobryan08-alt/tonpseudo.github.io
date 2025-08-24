@@ -1,208 +1,252 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Architext - Inscription</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      background: linear-gradient(135deg, #1e3c72, #2a5298);
-      color: white;
-      text-align: center;
-      padding: 50px;
-      margin: 0;
-    }
-    header nav {
-      display: flex;
-      justify-content: center;
-      gap: 30px;
-      padding: 20px;
-      background: #16355a;
-    }
-    header nav h1 {
-      margin: 0;
-      font-weight: bold;
-      font-size: 1.8rem;
-    }
-    header nav ul {
-      list-style: none;
-      display: flex;
-      gap: 20px;
-      margin: 0;
-      padding: 0;
-      align-items: center;
-    }
-    header nav ul li a {
-      color: white;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 1rem;
-      transition: color 0.3s ease;
-    }
-    header nav ul li a:hover {
-      color: #ffb347;
-    }
-    form {
-      background: #2a5298;
-      padding: 30px 20px;
-      border-radius: 12px;
-      max-width: 350px;
-      margin: 40px auto;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
- }
-    input, select {
-      display: block;
-      width: 90%;
-      margin: 15px auto;
-      padding: 12px;
-      border-radius: 8px;
-      border: none;
-      font-size: 1rem;
-    }
-    button {
-      width: 95%;
-      padding: 14px;
-      border-radius: 8px;
-      border: none;
-      background: #ffb347;
-      color: #16355a;
-      font-weight: bold;
-      font-size: 1.1rem;
-      cursor: pointer;
-      margin-top: 10px;
-      transition: background 0.3s ease;
-    }
-    button:hover {
-      background: #ffa500;
-    }
-    #error {
-      margin-top: 15px;
-      color: #ff6b6b;
-      font-weight: 600;
-    }
-    section#about {
-      background: white;
-      color: #333;
-      max-width: 700px;
-      margin: 50px auto;
-      padding: 20px 30px;
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      font-size: 1.1rem;
-      line-height: 1.5;
-    }
-    footer {
-      margin-top: 50px;
-      padding: 20px;
-      background: #16355a;
-      color: white;
-      font-weight: 600;
-    }
-  </style>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
- import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyB_25LK7m2SXg4xAyaMXV18uU4b5-JPEHw",
-      authDomain: "architext-9efb6.firebaseapp.com",
-      projectId: "architext-9efb6",
-      storageBucket: "architext-9efb6.firebasestorage.app",
-      messagingSenderId: "70580255187",
-      appId: "1:70580255187:web:ee3591d6d3c2f52b491726"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    window.onload = () => {
-      const form = document.getElementById('signup-form');
-      const errorDiv = document.getElementById('error');
-
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        errorDiv.textContent = '';
-
-        const email = form.email.value.trim();
-        const password = form.password.value.trim();
-        const role = form.role.value;
-        const langue = form.langue.value;
-
-        try {
-          const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-          const uid = userCredential.user.uid;
-
-          await setDoc(doc(db, "users", uid), {
-            email: email,
-            role: role,
-            langue: langue,
- createdAt: new Date().toISOString()
-          });
-
-          alert("Inscription réussie ! Vous pouvez maintenant vous connecter.");
-          form.reset();
-          // Rediriger vers la page de connexion
-          window.location.href = "login.html";
-        } catch (error) {
-          errorDiv.textContent = "Erreur : " + error.message;
-        }
-      });
-    }
-  </script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Architext - Connexion & Inscription</title>
+<style>
+  body {
+    font-family: sans-serif;
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    color: white;
+    text-align: center;
+    padding: 20px;
+  }
+  form {
+    background: rgba(0,0,0,0.6);
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 320px;
+    margin: 20px auto;
+  }
+  input, select {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 5px;
+    border: none;
+    font-size: 1rem;
+  }
+  button {
+    width: 100%;
+    padding: 12px;
+    background: #fff;
+    color: #2a5298;
+    border: none;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1rem;
+  }
+  button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+  }
+  .error {
+    color: #ff6666;
+    margin-top: 10px;
+  }
+  .success {
+    color: #66ff66;
+    margin-top: 10px;
+  }
+  .toggle-link {
+    color: #fff;
+    text-decoration: underline;
+    cursor: pointer;
+    margin-top: 10px;
+ display: inline-block;
+  }
+</style>
 </head>
 <body>
-  <header>
-    <nav>
-      <h1>Architext</h1>
-      <ul>
-        <li><a href="#">Accueil</a></li>
-        <li><a href="#about">À propos</a></li>
-        <li><a href="#">Contact</a></li>
-      </ul>
-    </nav>
-  </header>
 
-  <main>
-    <form id="signup-form" aria-label="Formulaire d'inscription Architext">
-      <h2>Créer un compte</h2>
-      <input type="email" name="email" placeholder="Adresse e-mail" required autocomplete="email" />
-      <input type="password" name="password" placeholder="Mot de passe (min. 6 caractères)" required minlength="6" autocomplete="new-password" />
+<h1>Architext</h1>
 
-      <select name="role" required aria-label="Choisir un rôle">
-        <option value="" disabled selected>Choisissez votre rôle</option>
-        <option value="utilisateur">Utilisateur</option>
-        <option value="architecte">Architecte</option>
-      </select>
- <select name="langue" required aria-label="Choisir une langue préférée">
-        <option value="" disabled selected>Langue préférée</option>
-        <option value="français">Français</option>
-        <option value="anglais">Anglais</option>
-        <option value="espagnol">Espagnol</option>
-        <option value="arabe">Arabe</option>
-        <option value="mandarin">Mandarin</option>
-      </select>
+<!-- Formulaire d'inscription -->
+<form id="signup-form">
+  <h2>Inscription</h2>
+  <input type="email" id="signup-email" placeholder="Email" required />
+  <input type="password" id="signup-password" placeholder="Mot de passe (min 6 caractères)" required minlength="6" />
+  <select id="signup-role" required>
+    <option value="">Sélectionnez votre rôle</option>
+    <option value="user">Utilisateur</option>
+    <option value="architect">Architecte</option>
+  </select>
+  <button type="submit" id="signup-btn">S'inscrire</button>
+  <div class="error" id="signup-error"></div>
+  <div class="success" id="signup-success"></div>
+  <span class="toggle-link" id="show-login">Vous avez déjà un compte ? Connectez-vous</span>
+</form>
 
-      <button type="submit">S'inscrire</button>
-      <div id="error" role="alert" aria-live="assertive"></div>
-    </form>
+<!-- Formulaire de connexion -->
+<form id="login-form" style="display:none;">
+  <h2>Connexion</h2>
+  <input type="email" id="login-email" placeholder="Email" required />
+  <input type="password" id="login-password" placeholder="Mot de passe" required />
+  <button type="submit" id="login-btn">Se connecter</button>
+  <div class="error" id="login-error"></div>
+  <span class="toggle-link" id="show-signup">Pas encore de compte ? Inscrivez-vous</span>
+</form>
 
-    <section id="about">
-      <h2>À propos</h2>
-      <p>
-        BryLeb Créations est votre partenaire privilégié pour des projets architecturaux modernes, innovants et personnalisés,
-        alliant esthétisme et performance durable. Explorez nos réalisations et construisez avec Architext la vision de demain.
-      </p>
-    </section>
-  </main>
+<script type="module">
+ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+  import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-  <footer>
-    <p>&copy; 2025 BryLeb Créations - Tous droits réservés</p>
-  </footer>
+  const firebaseConfig = {
+    apiKey: "AIzaSyB_25LK7m2SXg4xAyaMXV18uU4b5-JPEHw",
+    authDomain: "architext-9efb6.firebaseapp.com",
+    projectId: "architext-9efb6",
+    storageBucket: "architext-9efb6.firebasestorage.app",
+    messagingSenderId: "70580255187",
+    appId: "1:70580255187:web:ee3591d6d3c2f52b491726"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  // Elements inscription
+  const signupForm = document.getElementById('signup-form');
+  const signupEmail = document.getElementById('signup-email');
+  const signupPassword = document.getElementById('signup-password');
+  const signupRole = document.getElementById('signup-role');
+  const signupBtn = document.getElementById('signup-btn');
+  const signupError = document.getElementById('signup-error');
+  const signupSuccess = document.getElementById('signup-success');
+ // Elements connexion
+  const loginForm = document.getElementById('login-form');
+  const loginEmail = document.getElementById('login-email');
+  const loginPassword = document.getElementById('login-password');
+  const loginBtn = document.getElementById('login-btn');
+  const loginError = document.getElementById('login-error');
+
+  // Toggle entre formulaire inscription/connexion
+  document.getElementById('show-login').addEventListener('click', () => {
+    signupForm.style.display = 'none';
+    loginForm.style.display = 'block';
+    clearMessages();
+  });
+
+  document.getElementById('show-signup').addEventListener('click', () => {
+    loginForm.style.display = 'none';
+    signupForm.style.display = 'block';
+    clearMessages();
+  });
+
+  function clearMessages() {
+    signupError.textContent = '';
+    signupSuccess.textContent = '';
+    loginError.textContent = '';
+  }
+
+  // Inscription
+  signupForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    clearMessages();
+    signupBtn.disabled = true;
+
+    const email = signupEmail.value.trim();
+    const password = signupPassword.value.trim();
+    const role = signupRole.value;
+
+    if (!email || !password || !role) {
+      signupError.textContent = "Veuillez remplir tous les champs.";
+      signupBtn.disabled = false;
+[24/08 à 23:33] ChatGPT: return;
+    }
+    if (password.length < 6) {
+      signupError.textContent = "Le mot de passe doit contenir au moins 6 caractères.";
+      signupBtn.disabled = false;
+      return;
+    }
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      await setDoc(doc(db, "users", user.uid), { role });
+
+      signupSuccess.textContent = "Inscription réussie ! Redirection...";
+      signupBtn.disabled = false;
+
+      setTimeout(() => {
+        redirectByRole(role);
+      }, 1500);
+
+    } catch (error) {
+      if (error.code === 'auth/email-already-in-use') {
+        signupError.textContent = "Cet email est déjà utilisé.";
+      } else if (error.code === 'auth/invalid-email') {
+        signupError.textContent = "Email invalide.";
+      } else {
+        signupError.textContent = "Erreur : " + error.message;
+      }
+      signupBtn.disabled = false;
+    }
+  });
+
+  // Connexion
+  loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    clearMessages();
+    loginBtn.disabled = true;
+
+    const email = loginEmail.value.trim();
+    const password = loginPassword.value.trim();
+
+    if (!email || !password) {
+      loginError.textContent = "Veuillez remplir tous les champs.";
+loginBtn.disabled = false;
+      return;
+    }
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      const docSnap = await getDoc(doc(db, "users", user.uid));
+      if (docSnap.exists()) {
+        const role = docSnap.data().role;
+        loginBtn.disabled = false;
+        redirectByRole(role);
+      } else {
+        loginError.textContent = "Aucun rôle trouvé pour cet utilisateur.";
+        loginBtn.disabled = false;
+      }
+
+    } catch (error) {
+      if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
+        loginError.textContent = "Email ou mot de passe incorrect.";
+      } else {
+        loginError.textContent = "Erreur : " + error.message;
+      }
+      loginBtn.disabled = false;
+    }
+  });
+
+  // Redirection selon rôle
+  function redirectByRole(role) {
+    if (role === 'architect') {
+      window.location.href = 'dashboard_architect.html';
+    } else {
+      window.location.href = 'dashboard_user.html';
+    }
+  }
+
+  // Gestion session & redirection auto
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      const docSnap = await getDoc(doc(db, "users", user.uid));
+      if (docSnap.exists()) {
+ const role = docSnap.data().role;
+        redirectByRole(role);
+      }
+    }
+  });
+
+</script>
+
 </body>
 </html>
-
-
