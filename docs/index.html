@@ -6,247 +6,127 @@
 <title>Architext - Connexion & Inscription</title>
 <style>
   body {
-    font-family: sans-serif;
+    font-family: Arial, sans-serif;
     background: linear-gradient(135deg, #1e3c72, #2a5298);
     color: white;
     text-align: center;
-    padding: 20px;
+    padding: 50px 20px;
   }
+  h1 { margin-bottom: 20px; }
   form {
-    background: rgba(0,0,0,0.6);
+    background: rgba(255,255,255,0.1);
     padding: 20px;
-    border-radius: 8px;
-    max-width: 320px;
     margin: 20px auto;
+    max-width: 350px;
+    border-radius: 10px;
+  }
+  label {
+    display: block;
+    text-align: left;
+    margin: 10px 0 5px;
   }
   input, select {
     width: 100%;
-    padding: 10px;
-    margin: 8px 0;
-    border-radius: 5px;
+    padding: 8px;
     border: none;
-    font-size: 1rem;
+    border-radius: 5px;
   }
   button {
+    margin-top: 15px;
+    padding: 10px;
     width: 100%;
-    padding: 12px;
     background: #fff;
-    color: #2a5298;
-    border: none;
-    font-weight: bold;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1.1rem;
-  }
-  button:disabled {
-    background: #ccc;
-    cursor: not-allowed;
-  }
-  .error {
-    color: #ff6666;
-    margin-top: 10px;
-  }
-  .success {
-    color: #66ff66;
-    margin-top: 10px;
-  }
-  .toggle-link {
-    color: #fff;
-    text-decoration: underline;
-    cursor: pointer;
-    margin-top: 10px;
- display: inline-block;
+ const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const signupSection = document.getElementById("signup-section");
+    const loginSection = document.getElementById("login-section");
+    const signupForm = document.getElementById("signup-form");
+    const loginForm = document.getElementById("login-form");
+    const signupError = document.getElementById("signup-error");
+    const loginError = document.getElementById("login-error");
+
+    document.getElementById("show-login").addEventListener("click", () => {
+      signupSection.style.display = "none";
+      loginSection.style.display = "block";
+      signupError.textContent = "";
+      loginError.textContent = "";
+    });
+    document.getElementById("show-signup").addEventListener("click", () => {
+      loginSection.style.display = "none";
+      signupSection.style.display = "block";
+      signupError.textContent = "";
+      loginError.textContent = "";
+    });
+
+    signupForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      signupError.textContent = "";
+      const email = document.getElementById("signup-email").value.trim();
+      const password = document.getElementById("signup-password").value;
+      const role = document.getElementById("signup-role").value;
+
+      try {
+ font-weight: bold;
   }
 </style>
 </head>
 <body>
+  <h1>Bienvenue sur votre espace utilisateur</h1>
+  <p>Ici vous pouvez gérer vos projets, voir vos plans, etc.</p>
+  <button id="logout-btn">Se déconnecter</button>
 
-<h1>Architext</h1>
-
-<!-- Formulaire d'inscription -->
-<form id="signup-form">
-  <h2>Inscription</h2>
-  <input type="email" id="signup-email" placeholder="Email" required />
-  <input type="password" id="signup-password" placeholder="Mot de passe (min 6 caractères)" required minlength="6" />
-  <select id="signup-role" required>
-    <option value="">Sélectionnez votre rôle</option>
-    <option value="user">Utilisateur</option>
-    <option value="architect">Architecte</option>
-  </select>
-  <button type="submit" id="signup-btn">S'inscrire</button>
-  <div class="error" id="signup-error"></div>
-  <div class="success" id="signup-success"></div>
-  <span class="toggle-link" id="show-login">Vous avez déjà un compte ? Connectez-vous</span>
-</form>
-
-<!-- Formulaire de connexion -->
-<form id="login-form" style="display:none;">
-  <h2>Connexion</h2>
-  <input type="email" id="login-email" placeholder="Email" required />
-  <input type="password" id="login-password" placeholder="Mot de passe" required />
-  <button type="submit" id="login-btn">Se connecter</button>
-  <div class="error" id="login-error"></div>
-  <span class="toggle-link" id="show-signup">Pas encore de compte ? Inscrivez-vous</span>
-</form>
-
-<script type="module">
- import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
-  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
-  import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyB_25LK7m2SXg4xAyaMXV18uU4b5-JPEHw",
-    authDomain: "architext-9efb6.firebaseapp.com",
-    projectId: "architext-9efb6",
-    storageBucket: "architext-9efb6.firebasestorage.app",
-    messagingSenderId: "70580255187",
-    appId: "1:70580255187:web:ee3591d6d3c2f52b491726"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
-
-  // Elements inscription
-  const signupForm = document.getElementById('signup-form');
-  const signupEmail = document.getElementById('signup-email');
-  const signupPassword = document.getElementById('signup-password');
-  const signupRole = document.getElementById('signup-role');
-  const signupBtn = document.getElementById('signup-btn');
-  const signupError = document.getElementById('signup-error');
-  const signupSuccess = document.getElementById('signup-success');
- // Elements connexion
-  const loginForm = document.getElementById('login-form');
-  const loginEmail = document.getElementById('login-email');
-  const loginPassword = document.getElementById('login-password');
-  const loginBtn = document.getElementById('login-btn');
-  const loginError = document.getElementById('login-error');
-
-  // Toggle entre formulaire inscription/connexion
-  document.getElementById('show-login').addEventListener('click', () => {
-    signupForm.style.display = 'none';
-    loginForm.style.display = 'block';
-    clearMessages();
-  });
-
-  document.getElementById('show-signup').addEventListener('click', () => {
-    loginForm.style.display = 'none';
-    signupForm.style.display = 'block';
-    clearMessages();
-  });
-
-  function clearMessages() {
-    signupError.textContent = '';
-    signupSuccess.textContent = '';
-    loginError.textContent = '';
-  }
-
-  // Inscription
-  signupForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    clearMessages();
-    signupBtn.disabled = true;
-
-    const email = signupEmail.value.trim();
-    const password = signupPassword.value.trim();
-    const role = signupRole.value;
-
-    if (!email || !password || !role) {
-      signupError.textContent = "Veuillez remplir tous les champs.";
-      signupBtn.disabled = false;
-[24/08 à 23:33] ChatGPT: return;
-    }
-    if (password.length < 6) {
-      signupError.textContent = "Le mot de passe doit contenir au moins 6 caractères.";
-      signupBtn.disabled = false;
-      return;
-    }
-
-    try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-
-      await setDoc(doc(db, "users", user.uid), { role });
-
-      signupSuccess.textContent = "Inscription réussie ! Redirection...";
-      signupBtn.disabled = false;
-
-      setTimeout(() => {
-        redirectByRole(role);
-      }, 1500);
-
-    } catch (error) {
-      if (error.code === 'auth/email-already-in-use') {
-        signupError.textContent = "Cet email est déjà utilisé.";
-      } else if (error.code === 'auth/invalid-email') {
-        signupError.textContent = "Email invalide.";
-      } else {
-        signupError.textContent = "Erreur : " + error.message;
+  <script type="module">
+    import { initializeApp }
+ loginError.textContent = "Rôle utilisateur non défini.";
+          }
+        } else {
+          loginError.textContent = "Utilisateur non trouvé en base.";
+        }
+      } catch (error) {
+        loginError.textContent = error.message;
       }
-      signupBtn.disabled = false;
-    }
-  });
+    });
 
-  // Connexion
-  loginForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    clearMessages();
-    loginBtn.disabled = true;
-
-    const email = loginEmail.value.trim();
-    const password = loginPassword.value.trim();
-
-    if (!email || !password) {
-      loginError.textContent = "Veuillez remplir tous les champs.";
-loginBtn.disabled = false;
-      return;
-    }
-
-    try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-
-      const docSnap = await getDoc(doc(db, "users", user.uid));
-      if (docSnap.exists()) {
-        const role = docSnap.data().role;
-        loginBtn.disabled = false;
-        redirectByRole(role);
-      } else {
-        loginError.textContent = "Aucun rôle trouvé pour cet utilisateur.";
-        loginBtn.disabled = false;
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const userDoc = await getDoc(doc(db, "users", user.uid));
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          if (userData.role === "utilisateur") {
+            window.location.href = "user-dashboard.html";
+          } else if (userData.role === "architecte") {
+            window.location.href = "architect-dashboard.html";
+          }
+        }
       }
-
-    } catch (error) {
-      if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
-        loginError.textContent = "Email ou mot de passe incorrect.";
-      } else {
-        loginError.textContent = "Erreur : " + error.message;
-      }
-      loginBtn.disabled = false;
-    }
-  });
-
-  // Redirection selon rôle
-  function redirectByRole(role) {
-    if (role === 'architect') {
-      window.location.href = 'dashboard_architect.html';
-    } else {
-      window.location.href = 'dashboard_user.html';
-    }
-  }
-
-  // Gestion session & redirection auto
-  onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      const docSnap = await getDoc(doc(db, "users", user.uid));
-      if (docSnap.exists()) {
- const role = docSnap.data().role;
-        redirectByRole(role);
-      }
-    }
-  });
-
-</script>
-
+    });
+  </script>
 </body>
 </html>
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Dashboard Utilisateur - Architext</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #2a5298;
+    color: white;
+    text-align: center;
+    padding: 50px 20px;
+  }
+  button {
+    padding: 10px 20px;
+    background: white;
+    color: #2a5298;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
